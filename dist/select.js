@@ -349,15 +349,23 @@
           ctrl.sizeSearchInput();
         } else {
           ctrl.selected = item;
+          var selectedFromDropdown = true;
         }
-        ctrl.close(skipFocusser);
+        ctrl.close(skipFocusser, selectedFromDropdown);
       }
     };
 
     // Closes the dropdown
-    ctrl.close = function(skipFocusser) {
+    ctrl.close = function(skipFocusser, selectedFromDropdown) {
       if (!ctrl.open) return;        
-      _resetSearchInput();
+      if (ctrl.search) {
+        ctrl.selected = { name: ctrl.search, id: null} // id set as null for form validation
+      } 
+      else { 
+        if (!selectedFromDropdown){
+          ctrl.selected = undefined;
+        } 
+      }
       ctrl.open = false;
       if (!ctrl.multiple){
         $timeout(function(){
